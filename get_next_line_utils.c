@@ -71,8 +71,6 @@ char *ft_strjoin(char *s1, char *s2)
 	j = 0;
 	if (!s1 || !s2)
 		return (NULL);
-	//else if (!s1 && s2)
-	//	s1 = ft_strdup("");
 
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
@@ -90,6 +88,7 @@ char *ft_strjoin(char *s1, char *s2)
 	}
 	str[i] = '\0';
 	free(s2);
+	free(s1);
 	return (str);
 }
 

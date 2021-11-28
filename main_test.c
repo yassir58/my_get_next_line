@@ -24,6 +24,7 @@ int main()
         }
         ptr = get_next_line(fd);
         printf("%s",ptr);
+        //free(ptr);
         //printf("%s %s \n", func("hello world"), func(NULL));
         /*char *str ;
 
