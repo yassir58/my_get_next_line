@@ -13,7 +13,7 @@ char *func(char *str)
 
 int main()
 {
-        int fd = open("alternate_line_nl_with_nl",O_RDWR | O_CREAT, S_IRWXU);
+        int fd = open("alternate_line_nl_no_nl",O_RDWR | O_CREAT, S_IRWXU);
         char *ptr;
         static char *test;
 

@@ -107,7 +107,7 @@ void process_buffer(char **buffer, char **backup, char **line, char **rest, int 
 		*backup = ft_strdup(*rest);
 		free(*rest);
 	}
-	 if (!*line && !(*buffer) && *backup)
+	 if (!(*line) && !(*buffer) && *backup)
 	{
 		*line = ft_strdup(*backup);
 		free(*backup);
