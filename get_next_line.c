@@ -46,10 +46,16 @@ char *get_rest_backup(char *buffer)
 
 	res_backup = NULL;
 	temp_str = NULL;
+	
 	if (!buffer)
 		return (NULL);
 	temp_str = ft_strchr(buffer , '\n');
 	res_backup = ft_strdup(++temp_str);
+	if (res_backup[0] == '\0')
+	{
+		free(res_backup);
+		return (NULL);
+	}
 	return (res_backup);
 }
 
@@ -69,24 +75,27 @@ int check_nl(char *buffer)
 	return (0);
 }
 
-
-void process_buffer(char **buffer, char **backup, char **line, char **rest, int fd)
+char* extract_line(char **buffer, char **backup,char **line_return)
 {
-	if (check_nl(*buffer) == 1)
-	{
-		if (!(*backup))
+	char *line;
+
+	line = NULL;
+	if (!(*backup))
 		*backup = ft_strdup("");
-		*buffer = ft_strjoin(*backup, *buffer);
-		*line = try_get_line(*buffer);
-		*rest = get_rest_backup(*buffer);
-		if (!rest)
-		{
-			free(*backup);
-			*backup = NULL;
-		}
-		*backup = ft_strdup(*rest);
-		free(*rest);
-	}
+	*buffer = ft_strjoin(*backup, *buffer);
+	line = try_get_line(*buffer);
+	*line_return = line;
+	*backup = get_rest_backup(*buffer);
+	return (line);
+}
+
+char *process_buffer(char **buffer, char **backup ,int fd)
+{
+	char *line_return;
+
+	line_return = NULL;
+	if (check_nl(*buffer) == 1)
+		return (extract_line(buffer, backup, &line_return));
 	while (check_nl(*buffer) == 0 && *buffer)
 	{
 		if (!(*backup))
@@ -94,47 +103,44 @@ void process_buffer(char **buffer, char **backup, char **line, char **rest, int 
 		*backup = ft_strjoin(*backup, *buffer);
 		*buffer = read_buffer(fd);
 	}
-	if (!*line && *buffer && *backup)
+	if (*buffer && *backup)
+		return (extract_line(buffer, backup, &line_return));
+	if (!line_return && !(*buffer) && *backup)
 	{
-		*buffer = ft_strjoin(*backup, *buffer);
-		*line = try_get_line(*buffer);
-		*rest = get_rest_backup(*buffer);
-		if (!rest)
-		{
-			free(*backup);
-			*backup = NULL ;
-		}
-		*backup = ft_strdup(*rest);
-		free(*rest);
-	}
-	 if (!(*line) && !(*buffer) && *backup)
-	{
-		*line = ft_strdup(*backup);
+		line_return = ft_strdup(*backup);
 		free(*backup);
 		*backup = NULL;
+		return (line_return);
 	}
+	return (NULL);
 }
 
 char *get_next_line(int fd)
 {
 	char *buffer;
-	char *rest;
 	char *line ;
 	static char *backup;
 
 	line  = NULL ;
-	buffer = read_buffer(fd);
-
-	if (fd == -1 || (!buffer && !backup))
-		return (NULL);
-
-	 else if (!buffer && backup)
+	if (backup && check_nl(backup) == 1)
 	{
 		buffer = ft_strdup(backup);
 		free(backup);
 		backup = NULL ;
 	}
-	process_buffer(&buffer, &backup, &line, &rest, fd);
+	else
+	buffer = read_buffer(fd);
+	
+	if (fd == -1 || (!buffer && !backup))
+		return (NULL);
+	else if (!buffer && backup)
+	{
+		buffer = ft_strdup(backup);
+		free(backup);
+		backup = NULL ;
+	}
+	line = process_buffer(&buffer, &backup, fd);
+	free(buffer);
 	return (line);
 }
 

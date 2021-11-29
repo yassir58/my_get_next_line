@@ -13,23 +13,31 @@ char *func(char *str)
 
 int main()
 {
-        int fd = open("alternate_line_nl_no_nl",O_RDWR | O_CREAT, S_IRWXU);
+        int fd = open("gnlTester/files/alternate_line_nl_no_nl",O_RDWR | O_CREAT, S_IRWXU);
         char *ptr;
-        static char *test;
 
-        while ((ptr = get_next_line(fd)))
-        {
-                printf("%s",ptr);
-                free(ptr);
-        }
         ptr = get_next_line(fd);
-        printf("%s",ptr);
-        //free(ptr);
-        //printf("%s %s \n", func("hello world"), func(NULL));
-        /*char *str ;
-
-        str = ft_strdup("hello world");
-        str = NULL;
-        printf("%s \n", str);*/
+        printf("test 1 : %s \n",ptr);
+       ptr = get_next_line(fd);
+        printf("test 2 : %s\n",ptr);
+         ptr = get_next_line(fd);
+        printf("test 3 : %s\n",ptr);
+        ptr = get_next_line(fd);
+        printf("test 4 : %s\n",ptr);
+         ptr = get_next_line(fd);
+        printf("test 5 : %s\n",ptr);
+        ptr = get_next_line(fd);
+        printf("test 6 : %s\n",ptr);
+         ptr = get_next_line(fd);
+        printf("test 7 : %s\n",ptr);
+        ptr = get_next_line(fd);
+        printf("test 8 : %s\n",ptr);
+         ptr = get_next_line(fd);
+        printf("test 9 : %s\n",ptr);
+        ptr = get_next_line(fd);
+        printf("test 10 : %s\n",ptr);
+       
+       
+        
 }
 
